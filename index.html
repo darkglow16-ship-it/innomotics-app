@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_3.html -->
+<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_4.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -918,6 +918,33 @@ function handleFileList(files){
 
 function procesarArrayBuffer(nombre, buf, mostrarMsg, guardadoEnDB=false){
   if(allFiles.includes(nombre))return;
+
+  // Si es CSV, procesarlo directamente
+  if(nombre.toLowerCase().endsWith('.csv')){
+    const texto = new TextDecoder('utf-8').decode(new Uint8Array(buf));
+    const lineas = texto.split('\n').map(l=>l.trim()).filter(l=>l);
+    let fileCount = 0;
+    // Saltar encabezado
+    for(let i=1; i<lineas.length; i++){
+      const partes = lineas[i].split(',');
+      if(partes.length < 3) continue;
+      const hoja   = partes[0].trim();
+      const codigo = partes[1].trim();
+      const desc   = partes.slice(2).join(',').trim().replace(/^"|"$/g,'');
+      if(codigo && desc && !isNaN(Number(codigo))){
+        allData.push({codigo, desc, fileName:nombre, sheet:hoja, id:allData.length});
+        fileCount++;
+      }
+    }
+    allFiles.push(nombre);
+    activeFiles.add(nombre);
+    if(mostrarMsg){
+      warnArea.innerHTML=`<div class="ok-box"><i class="ti ti-circle-check"></i> <b>${nombre}</b>: ${fileCount} repuestos indexados ${guardadoEnDB?'<i class="ti ti-device-floppy"></i> guardado':'(solo en sesión)'}</div>`;
+    }
+    renderPills(); updateStats();
+    return;
+  }
+
   allFiles.push(nombre);
   activeFiles.add(nombre);
 
