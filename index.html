@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_1.html -->
+<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_3.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -142,11 +142,42 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
 .main-content .container{max-width:100%;margin:0;width:100%}
 .module{display:none}
 .module.active{display:block}
-@media(max-width:640px){
-  .sidebar{width:54px}
-  .sidebar-logo .logo-text,.sidebar-logo .logo-sub,.nav-item span,.nav-label{display:none}
-  .nav-item{justify-content:center;padding:12px}
-  .main-content{margin-left:54px;padding:1rem;width:calc(100vw - 54px)}
+/* Botón hamburguesa — solo visible en móvil */
+.menu-toggle{display:none;position:fixed;top:12px;left:12px;z-index:300;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;color:var(--yellow)}
+@media(max-width:768px){
+  .menu-toggle{display:flex;align-items:center;justify-content:center}
+  .sidebar{
+    width:220px;
+    transform:translateX(-220px);
+    transition:transform 0.25s ease;
+    box-shadow:none;
+  }
+  .sidebar.open{
+    transform:translateX(0);
+    box-shadow:4px 0 24px rgba(0,0,0,0.5);
+  }
+  /* Overlay oscuro detrás del sidebar */
+  .sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:99;
+  }
+  .sidebar-overlay.open{display:block}
+  .main-content{
+    margin-left:0;
+    padding:1rem 0.75rem;
+    width:100vw;
+    padding-top:56px;
+  }
+  /* Ajustes de grids para móvil */
+  .result-header{grid-template-columns:24px 1fr 80px}
+  .result-item{grid-template-columns:24px 1fr 80px}
+  .result-header span:nth-child(3){display:none}
+  .result-item>span:nth-child(3){display:none}
+  .residuo-item{grid-template-columns:1fr 90px 32px}
+  .sel-item{grid-template-columns:1fr 70px 28px}
 }
 .residuo-item{display:grid;grid-template-columns:2fr 180px 120px 36px;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px}
 .residuo-item:last-child{border-bottom:none}
@@ -155,6 +186,14 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
 </style>
 </head>
 <body style="margin:0;padding:0;display:flex;width:100vw;overflow-x:hidden">
+
+<!-- Botón hamburguesa (solo móvil) -->
+<button class="menu-toggle" onclick="toggleSidebar()" id="menu-toggle">
+  <i class="ti ti-menu-2" style="font-size:20px"></i>
+</button>
+
+<!-- Overlay oscuro -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
 <!-- BARRA LATERAL -->
 <div class="sidebar">
@@ -1809,11 +1848,22 @@ function descargarCSV(rows,nombre){
 /* =========================================================
    NAVEGACIÓN LATERAL
    ========================================================= */
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
 function cambiarModulo(modulo, navItem){
   document.querySelectorAll('.module').forEach(m=>m.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('mod-'+modulo).classList.add('active');
   navItem.classList.add('active');
+  closeSidebar(); // cerrar sidebar al seleccionar módulo en móvil
 }
 
 /* =========================================================
