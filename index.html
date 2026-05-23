@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0059)file:///C:/Users/robar/Downloads/buscador_repuestos_10.html -->
+<!-- saved from url=(0061)file:///C:/Users/robar/Downloads/buscador_repuestos_10_1.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -245,7 +245,7 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
   <div id="stats-row" class="stats-row" style="display: flex;">
     <span class="stat-chip"><i class="ti ti-files"></i> <span id="s-files">6</span> archivos</span>
     <span class="stat-chip" style="color:var(--border2)">·</span>
-    <span class="stat-chip"><span id="s-rows">1048</span> repuestos indexados</span>
+    <span class="stat-chip"><span id="s-rows">1148</span> repuestos indexados</span>
     <span class="stat-chip" style="margin-left:auto;display:flex;align-items:center;gap:4px">
       <i class="ti ti-device-floppy" style="font-size:13px;color:var(--teal)"></i>
       <span style="font-size:12px;color:var(--teal)">Guardado en este navegador</span>
@@ -2335,33 +2335,39 @@ async function semExportarExcel(){
    ========================================================= */
 function parsearCSV(texto){
   const lineas = texto.trim().split('\n');
-  // Detectar separador usando fila de datos (encabezado puede tener ;;; vacíos extra)
-  const primeraLinea = lineas[0];
-  let sep = ',';
-  for(let i=1; i<Math.min(5,lineas.length); i++){
-    const l = lineas[i].trim();
-    if(!l) continue;
-    const byComa    = l.split(',').filter(x=>x.trim()).length;
-    const bySemiCol = l.split(';').filter(x=>x.trim()).length;
-    if(bySemiCol > byComa){ sep=';'; }
-    break;
-  }
+  // Encabezado: quitar columnas vacías extra (;;; o ,,,)
+  let primeraLinea = lineas[0].replace(/\r$/,'');
+  // Quitar columnas vacías al final del encabezado
+  primeraLinea = primeraLinea.replace(/[,;]+$/, '');
+  // Detectar separador: usar coma salvo que el encabezado use ; entre columnas reales
+  const sep = (primeraLinea.indexOf(';') > -1 && primeraLinea.indexOf(',') === -1) ? ';' : ',';
   const encabezado = primeraLinea.split(sep);
   const resultado = [];
   for(let i=1;i<lineas.length;i++){
-    const linea = lineas[i].trim();
+    let linea = lineas[i].replace(/\r$/,'').trim();
     if(!linea) continue;
-    // Parsear respetando comillas
+    // Caso especial: fila envuelta en comillas externas tipo "cod,tag,...,""desc"",fab";;;;;
+    // Quitar ;;; o ,,, vacíos al final
+    linea = linea.replace(/[;]+$/, '').replace(/[,]+$/, '');
+    // Si la fila empieza y termina con comilla, es una fila envuelta — desenvolver
+    if(linea.startsWith('"') && linea.endsWith('"')){
+      linea = linea.slice(1, -1);
+      // Reemplazar "" internos por marcador temporal
+      linea = linea.replace(/""/g, '\x01');
+    } else {
+      linea = linea.replace(/""/g, '\x01');
+    }
+    // Parsear respetando comillas simples restantes
     const campos = [];
     let actual = '', enComilla = false;
     for(let c=0;c<linea.length;c++){
       if(linea[c]==='"') enComilla=!enComilla;
-      else if(linea[c]===sep && !enComilla){ campos.push(actual); actual=''; }
+      else if(linea[c]===sep && !enComilla){ campos.push(actual.replace(/\x01/g,'"')); actual=''; }
       else actual+=linea[c];
     }
-    campos.push(actual);
+    campos.push(actual.replace(/\x01/g,'"'));
     const obj = {};
-    encabezado.forEach((k,i) => obj[k.trim()] = (campos[i]||'').trim());
+    encabezado.forEach((k,idx) => obj[k.trim()] = (campos[idx]||'').trim());
     resultado.push(obj);
   }
   return resultado;
