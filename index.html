@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_5.html -->
+<!-- saved from url=(0045)file:///C:/Users/robar/Downloads/index_6.html -->
 <html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -240,12 +240,16 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
       <i class="ti ti-file" style="font-size:13px;flex-shrink:0"></i>
       <span class="pill-name" title="Planilla_2026_Inventario_Puerto_Patache_CMDIC.csv">Planilla_2026_Inventario_Pu…</span>
       <button class="pill-del" onclick="removeFile(&#39;Planilla_2026_Inventario_Puerto_Patache_CMDIC.csv&#39;)" title="Quitar Planilla_2026_Inventario_Puerto_Patache_CMDIC.csv"><i class="ti ti-x"></i></button>
+    </span><span class="file-pill">
+      <i class="ti ti-file" style="font-size:13px;flex-shrink:0"></i>
+      <span class="pill-name" title="01_MOTORES_PUERTO.csv">01_MOTORES_PUERTO.csv</span>
+      <button class="pill-del" onclick="removeFile(&#39;01_MOTORES_PUERTO.csv&#39;)" title="Quitar 01_MOTORES_PUERTO.csv"><i class="ti ti-x"></i></button>
     </span></div>
   <div id="warn-area"><div class="ok-box"><i class="ti ti-device-floppy"></i> 6 archivo(s) restaurado(s) automáticamente</div></div>
   <div id="stats-row" class="stats-row" style="display: flex;">
-    <span class="stat-chip"><i class="ti ti-files"></i> <span id="s-files">6</span> archivos</span>
+    <span class="stat-chip"><i class="ti ti-files"></i> <span id="s-files">7</span> archivos</span>
     <span class="stat-chip" style="color:var(--border2)">·</span>
-    <span class="stat-chip"><span id="s-rows">1048</span> repuestos indexados</span>
+    <span class="stat-chip"><span id="s-rows">1199</span> repuestos indexados</span>
     <span class="stat-chip" style="margin-left:auto;display:flex;align-items:center;gap:4px">
       <i class="ti ti-device-floppy" style="font-size:13px;color:var(--teal)"></i>
       <span style="font-size:12px;color:var(--teal)">Guardado en este navegador</span>
@@ -290,12 +294,140 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
     <i class="ti ti-search"></i>
     <input type="text" id="tag-q" placeholder="Ej: 310PP151, 310BM001..." oninput="buscarPorTag(this.value)">
   </div>
-  <div id="tag-info" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(225,240,0,0.08);border:1px solid rgba(225,240,0,0.2);border-radius:8px;font-size:13px;color:var(--yellow)"></div>
-  <div id="tag-results-wrap" style="display:none;margin-top:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden">
+  <div id="tag-info" style="display: none; margin-top: 8px; padding: 8px 12px; background: rgba(225, 240, 0, 0.08); border: 1px solid rgba(225, 240, 0, 0.2); border-radius: 8px; font-size: 13px; color: var(--yellow);"><i class="ti ti-tag"></i> <b>310PP151</b> — Hoja1 &nbsp;·&nbsp; <b>32</b> repuestos encontrados</div>
+  <div id="tag-results-wrap" style="display: none; margin-top: 12px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;">
     <div style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;padding:7px 12px;font-size:11px;color:var(--text3);font-weight:600;background:var(--bg3);border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.04em">
       <span></span><span>Código / Descripción</span><span>Cantidad</span>
     </div>
-    <div id="tag-results-body"></div>
+    <div id="tag-results-body"><div class="result-item" id="tag-ri-0" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(0,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">91868</span><br>CORREA ;CORREA TRANSMISION 5VX800</span>
+      <input type="number" min="1" value="1" onchange="tagItems[0].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-1" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(1,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">345116</span><span class="sheet-badge" style="margin-left:4px">A440200S90</span><br>BOMBA WARMAN 6x6-SRH_BS G924</span>
+      <input type="number" min="1" value="1" onchange="tagItems[1].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-2" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(2,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">767858</span><span class="sheet-badge" style="margin-left:4px">A440200S90-2</span><br>BOMBA WARMAN 6x6-SRH_BS CON REVESTIMIENTO EN POLIURETANO</span>
+      <input type="number" min="1" value="1" onchange="tagItems[2].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-3" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(3,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">465476</span><br>BOMBA WARMAN 6x6-SRH_BS G924 REPARABLE</span>
+      <input type="number" min="1" value="1" onchange="tagItems[3].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-4" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(4,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">336230</span><span class="sheet-badge" style="margin-left:4px">A440101000</span><br>CARCASA SUCCION</span>
+      <input type="number" min="1" value="1" onchange="tagItems[4].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-5" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(5,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">332080</span><span class="sheet-badge" style="margin-left:4px">A440102000</span><br>CARCASA PRENSA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[5].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-6" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(6,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">174805</span><span class="sheet-badge" style="margin-left:4px">A440104090</span><br>REVESTIMIENTO LADO SUCCION</span>
+      <input type="number" min="1" value="1" onchange="tagItems[6].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-7" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(7,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">345066</span><span class="sheet-badge" style="margin-left:4px">A440105090</span><br>REVESTIMIENTO LADO PRENSA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[7].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-8" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(8,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">174813</span><span class="sheet-badge" style="margin-left:4px">A440107090</span><br>IMPULSOR 4VC</span>
+      <input type="number" min="1" value="1" onchange="tagItems[8].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-9" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(9,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">174839</span><span class="sheet-badge" style="margin-left:4px">A440110090</span><br>DISCO SUCCION</span>
+      <input type="number" min="1" value="1" onchange="tagItems[9].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-10" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(10,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">174821</span><span class="sheet-badge" style="margin-left:4px">A440211090</span><br>DISCO PRENSA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[10].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-11" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(11,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">332163</span><span class="sheet-badge" style="margin-left:4px">A440197062</span><br>EMPAQUETADURA FLANGE DESCARGA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[11].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-12" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(12,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">415471</span><span class="sheet-badge" style="margin-left:4px">A440230000</span><br>CAJA PRENSA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[12].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-13" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(13,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">176248</span><span class="sheet-badge" style="margin-left:4px">A440231000</span><br>PRENSA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[13].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-14" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(14,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">441857</span><span class="sheet-badge" style="margin-left:4px">A440232001</span><br>ANILLO HIDRAULICO</span>
+      <input type="number" min="1" value="1" onchange="tagItems[14].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-15" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(15,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">31559</span><span class="sheet-badge" style="margin-left:4px">A440233000</span><br>CAMISA EJE</span>
+      <input type="number" min="1" value="1" onchange="tagItems[15].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-16" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(16,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">31534</span><span class="sheet-badge" style="margin-left:4px">A440134000</span><br>ANILLO ESPACIADOR (golilla impulsor)</span>
+      <input type="number" min="1" value="1" onchange="tagItems[16].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-17" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(17,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">31575</span><span class="sheet-badge" style="margin-left:4px">A440235000</span><br>EMPAQUETADURA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[17].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-18" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(18,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">456152</span><span class="sheet-badge" style="margin-left:4px">1031324000</span><br>O'RING ANILLO ESPACIADOR</span>
+      <input type="number" min="1" value="1" onchange="tagItems[18].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-19" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(19,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">326744</span><span class="sheet-badge" style="margin-left:4px">1031329000</span><br>O'RING CAMISA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[19].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-20" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(20,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">365197</span><span class="sheet-badge" style="margin-left:4px">A440220090</span><br>ANILLO DE DESGASTE</span>
+      <input type="number" min="1" value="1" onchange="tagItems[20].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-21" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(21,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">451328</span><span class="sheet-badge" style="margin-left:4px">A440221000</span><br>CAMISA ESPACIADORA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[21].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-22" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(22,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">326314</span><span class="sheet-badge" style="margin-left:4px">A440152000</span><br>BEARING ASSEMBLY N°4</span>
+      <input type="number" min="1" value="1" onchange="tagItems[22].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-23" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(23,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">441873</span><span class="sheet-badge" style="margin-left:4px">A440195000</span><br>CHAVETA</span>
+      <input type="number" min="1" value="1" onchange="tagItems[23].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-24" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(24,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">499491</span><span class="sheet-badge" style="margin-left:4px">A440198200</span><br>PROTECCION CORREAS</span>
+      <input type="number" min="1" value="1" onchange="tagItems[24].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-25" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(25,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">307629</span><span class="sheet-badge" style="margin-left:4px">PP05615500</span><br>POLEA 15.5DP.x5 - 5VxFUND.GRIS C/MANG. Polea Bomba</span>
+      <input type="number" min="1" value="1" onchange="tagItems[25].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-26" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(26,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">761949</span><span class="sheet-badge" style="margin-left:4px">A440198103</span><br>BOLT AJUSTING MONTAJE ZV WARMAN 100 SLR</span>
+      <input type="number" min="1" value="3" onchange="tagItems[26].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-27" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(27,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">758084</span><span class="sheet-badge" style="margin-left:4px">WA250Y-10</span><br>ACCUMIN CANISTER 250, MOBIL XHP 222</span>
+      <input type="number" min="1" value="1" onchange="tagItems[27].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-28" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(28,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">153536</span><br>MOTOR ELECTRICO TRIFASICO FACTOR SERVICIO 1.15, NEMA B,CLASE F,PARTIDA DIRECTA, TIPO CT, PARA OPERAR A 4500 M.S.N.M. PARA: ALMACENAMIENTO 310PP162</span>
+      <input type="number" min="1" value="1" onchange="tagItems[28].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-29" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(29,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">454942</span><br>MOTOR ELECTRICO TRIFASICO FACTOR SERVICIO 1.15, NEMA B,CLASE F,PARTIDA DIRECTA, TIPO CT, PARA OPERAR A 4500 M.S.N.M. PARA: ALMACENAMIENTO 310PP162</span>
+      <input type="number" min="1" value="1" onchange="tagItems[29].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-30" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(30,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">166694</span><br>MOTOR ELECTRICO 100 HP, 1480 RPM., FRAME 444T, TYPE TCE, TENSION 380 VOLT, FRECUENCIA 50 HZ, FASES 3, FACTOR DE SERVICIO 1.15, FACTOR DE POTENCIA 87.6, CORRIENTE 136 AMP.:PARA CORREA PUERTO  TAG 320CV027A MODELO : H16885 ENCL : TEFC RODAMIENTO EJE : 100BC02X3 RODAMIENTO VENTILADOR : 65BC03X3</span>
+      <input type="number" min="1" value="1" onchange="tagItems[30].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div><div class="result-item" id="tag-ri-31" style="display:grid;grid-template-columns:28px 1fr 90px;gap:8px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <input type="checkbox" onchange="toggleTagItem(31,this.checked)" style="accent-color:var(--yellow);width:16px;height:16px;cursor:pointer">
+      <span><span class="mono" style="color:var(--text3)">457176</span><br>MOTOR ELECTRICO 100 HP,1480 RPM.</span>
+      <input type="number" min="1" value="1" onchange="tagItems[31].qtyTag=parseInt(this.value)||1" style="width:80px;font-size:13px;padding:5px 8px;text-align:center;border:2px solid #E1F000;border-radius:6px;background:#E1F000;color:#000;font-weight:800;outline:none">
+    </div></div>
   </div>
   <button id="tag-add-btn" onclick="agregarTodosTag()" style="display:none;margin-top:10px;width:100%;padding:10px;font-size:14px;font-weight:600;background:var(--yellow);color:#000;border:none;border-radius:8px;cursor:pointer;align-items:center;justify-content:center;gap:6px">
     <i class="ti ti-circle-plus"></i> Agregar seleccionados a la lista
