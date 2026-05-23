@@ -14,10 +14,12 @@ BASE_DIR  = os.path.dirname(__file__)
 PLANTILLA = os.path.join(BASE_DIR, 'plantilla_sem.xlsx')
 
 PLANILLAS = [
-    'CODIGOS_CORREAS_PUERTO.xlsx',
-    'LUBRICANTES_PATACHE.xlsx',
-    'Matriz_de_riesgo_310FL00xxxx.xlsx',
+    'CODIGOS_CORREAS_PUERTO.csv',
+    'LUBRICANTES_PATACHE.csv',
+    'Matriz_de_riesgo_310FL00xxxx.csv',
     'Planilla_2026_Inventario_Puerto_Patache_CMDIC.csv',
+    '01_MOTORES_PUERTO.csv',
+    'Listado_Repuestos_Equipos_Patache_CMDIC.csv',
 ]
 
 @app.route('/')
