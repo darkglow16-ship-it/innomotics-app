@@ -13,9 +13,31 @@ CORS(app)
 BASE_DIR  = os.path.dirname(__file__)
 PLANTILLA = os.path.join(BASE_DIR, 'plantilla_sem.xlsx')
 
+PLANILLAS = [
+    'CODIGOS_CORREAS_PUERTO.xlsx',
+    'LUBRICANTES_PATACHE.xlsx',
+    'Matriz_de_riesgo_310FL00xxxx.xlsx',
+    'Planilla_2026_Inventario_Puerto_Patache_CMDIC.xlsx',
+]
+
 @app.route('/')
 def index():
     return send_from_directory(BASE_DIR, 'index.html')
+
+@app.route('/planillas')
+def listar_planillas():
+    return jsonify({'planillas': PLANILLAS})
+
+@app.route('/planilla/<nombre>')
+def servir_planilla(nombre):
+    if nombre not in PLANILLAS:
+        return jsonify({'error': 'Planilla no encontrada'}), 404
+    ruta = os.path.join(BASE_DIR, nombre)
+    if not os.path.exists(ruta):
+        return jsonify({'error': 'Archivo no encontrado'}), 404
+    with open(ruta, 'rb') as f:
+        b64 = base64.b64encode(f.read()).decode()
+    return jsonify({'nombre': nombre, 'data': b64})
 
 @app.route('/generar', methods=['POST'])
 def generar():
