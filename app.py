@@ -17,7 +17,7 @@ PLANILLAS = [
     'CODIGOS_CORREAS_PUERTO.xlsx',
     'LUBRICANTES_PATACHE.xlsx',
     'Matriz_de_riesgo_310FL00xxxx.xlsx',
-    'Planilla_2026_Inventario_Puerto_Patache_CMDIC.xlsx',
+    'Planilla_2026_Inventario_Puerto_Patache_CMDIC.csv',
 ]
 
 @app.route('/')
