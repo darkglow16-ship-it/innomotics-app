@@ -181,6 +181,10 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
       <i class="ti ti-calendar-week"></i>
       <span>Planilla semanal</span>
     </div>
+    <div class="nav-item" onclick="cambiarModulo('gases',this)">
+      <i class="ti ti-flame"></i>
+      <span>Solicitud de gases</span>
+    </div>
 
   </div>
   <div class="sidebar-footer">
@@ -581,6 +585,59 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
 
 </div><!-- fin mod-semanal -->
 
+
+<!-- MÓDULO SOLICITUD DE GASES -->
+<div id="mod-gases" class="module">
+
+<div class="header-row">
+  <div>
+    <h1 style="font-size:20px;font-weight:700;color:var(--yellow);margin:0"><i class="ti ti-flame" style="margin-right:8px"></i>Solicitud de Gases</h1>
+    <p class="subtitle" style="margin:2px 0 0">Genera correo de solicitud de compra de gases industriales</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-icon-header">
+    <div class="card-icon yellow"><i class="ti ti-cylinder"></i></div>
+    <div><div class="card-title">Datos de la solicitud</div><div class="card-sub">Ingresa las cantidades y la OT</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+    <div>
+      <span class="section-label">Fecha de solicitud</span>
+      <input type="date" id="gas-fecha" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+    <div>
+      <span class="section-label">OT (Orden de Trabajo)</span>
+      <input type="text" id="gas-ot" placeholder="Ej: 12345678" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+    <div>
+      <span class="section-label"><i class="ti ti-circle" style="color:#4fc3f7;margin-right:4px"></i>Oxígeno — CS: 528034</span>
+      <input type="number" id="gas-oxigeno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+    <div>
+      <span class="section-label"><i class="ti ti-circle" style="color:#ffb74d;margin-right:4px"></i>Acetileno — CS: 528067</span>
+      <input type="number" id="gas-acetileno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+    <div>
+      <span class="section-label"><i class="ti ti-circle" style="color:#ce93d8;margin-right:4px"></i>Argón — CS: 528000</span>
+      <input type="number" id="gas-argon" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW CORREO -->
+<div class="card" id="gas-preview-card">
+  <div class="card-icon-header">
+    <div class="card-icon yellow"><i class="ti ti-mail"></i></div>
+    <div><div class="card-title">Vista previa del correo</div><div class="card-sub">Se actualizará automáticamente</div></div>
+  </div>
+  <div id="gas-preview" style="margin-top:14px;padding:16px;background:var(--bg3);border-radius:10px;font-size:13px;line-height:1.9;color:var(--text2);white-space:pre-wrap;font-family:inherit"></div>
+  <button onclick="gasEnviarCorreo()" style="margin-top:14px;padding:12px 28px;background:var(--yellow);color:#000;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;gap:8px">
+    <i class="ti ti-send"></i> Abrir en Outlook
+  </button>
+</div>
+
+</div><!-- fin mod-gases -->
 
 <!-- POPUP PERNERÍA -->
 <div class="popup-overlay" id="popup">
@@ -2894,6 +2951,85 @@ function agregarTodosTag(){
   tagItems=[];
 }
 
+
+
+
+/* =========================================================
+   MÓDULO SOLICITUD DE GASES
+   ========================================================= */
+
+const GAS_PARA = 'tealcain@collahuasi.cl';
+const GAS_CC   = 'navalenc@collahuasi.cl;giovanni.munoz-cea@innomotics.com;manuel.espejo_barnett@innomotics.com;navergara@collahuasi.cl;sebastian.rodriguez.olivares@gmail.com;daguerra@collahuasi.cl';
+
+function gasJueveSiguiente(fechaStr){
+  // Dado un domingo (fecha de envío), retorna el jueves siguiente
+  if(!fechaStr) return '';
+  const [y,m,d] = fechaStr.split('-').map(Number);
+  const base = new Date(y, m-1, d);
+  // Día 0=dom, 4=jue
+  const diasHastaJueves = (4 - base.getDay() + 7) % 7 || 7;
+  base.setDate(base.getDate() + diasHastaJueves);
+  return `${String(base.getDate()).padStart(2,'0')}-${String(base.getMonth()+1).padStart(2,'0')}-${base.getFullYear()}`;
+}
+
+function gasActualizarPreview(){
+  const fecha     = document.getElementById('gas-fecha').value;
+  const ot        = document.getElementById('gas-ot').value.trim();
+  const oxigeno   = parseInt(document.getElementById('gas-oxigeno').value) || 0;
+  const acetileno = parseInt(document.getElementById('gas-acetileno').value) || 0;
+  const argon     = parseInt(document.getElementById('gas-argon').value) || 0;
+
+  const fechaEntrega = gasJueveSiguiente(fecha);
+
+  let lineasInsumos = '';
+  if(oxigeno > 0)   lineasInsumos += `CS: 528034; OXIGENO; OXIGENO INDUSTRIAL CILINDRO 10 M3 x ${oxigeno} unidades.
+`;
+  if(acetileno > 0) lineasInsumos += `CS: 528067; ACETILENO; ACETILENO CORRIENTE CILINDRO 7 KG x ${acetileno} unidades.
+`;
+  if(argon > 0)     lineasInsumos += `CS: 528000; INDURMIG; MEZCLA ARGON/CO2 x ${argon} unidades.
+`;
+
+  if(!lineasInsumos) lineasInsumos = '(Ingresa al menos una cantidad mayor a 0)
+';
+
+  const cuerpo = `Estimados,
+
+Favor su apoyo con la gestión de compra de los siguientes insumos.
+
+Solicito su apoyo en gestionar la compra de insumo, se necesita en puerto el día ${fechaEntrega || '(selecciona una fecha)'}, la cantidad requerida es la siguiente;
+
+${lineasInsumos}
+OT: ${ot || '(ingresa la OT)'}`;
+
+  document.getElementById('gas-preview').textContent = cuerpo;
+  window._gasCuerpo = cuerpo;
+}
+
+function gasEnviarCorreo(){
+  const ot        = document.getElementById('gas-ot').value.trim();
+  const oxigeno   = parseInt(document.getElementById('gas-oxigeno').value) || 0;
+  const acetileno = parseInt(document.getElementById('gas-acetileno').value) || 0;
+  const argon     = parseInt(document.getElementById('gas-argon').value) || 0;
+
+  if(!ot){ alert('Por favor ingresa la OT antes de enviar.'); return; }
+  if(oxigeno === 0 && acetileno === 0 && argon === 0){ alert('Por favor ingresa al menos una cantidad mayor a 0.'); return; }
+
+  const asunto = encodeURIComponent(`Solicitud de Gases Industriales - OT: ${ot}`);
+  const cuerpo = encodeURIComponent(window._gasCuerpo || '');
+  const cc     = encodeURIComponent(GAS_CC);
+
+  const mailto = `mailto:${GAS_PARA}?cc=${cc}&subject=${asunto}&body=${cuerpo}`;
+  window.location.href = mailto;
+}
+
+// Inicializar preview al cargar
+document.addEventListener('DOMContentLoaded', () => {
+  // Poner fecha de hoy por defecto
+  const hoy = new Date();
+  const fechaHoy = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+  const inputFecha = document.getElementById('gas-fecha');
+  if(inputFecha){ inputFecha.value = fechaHoy; gasActualizarPreview(); }
+});
 
 
 // Arrancar
