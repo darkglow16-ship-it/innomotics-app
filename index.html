@@ -615,14 +615,30 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
       <input type="number" id="gas-oxigeno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
     </div>
     <div>
-      <span class="section-label"><i class="ti ti-circle" style="color:#ffb74d;margin-right:4px"></i>Acetileno — CS: 528067</span>
-      <input type="number" id="gas-acetileno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
-    </div>
-    <div>
       <span class="section-label"><i class="ti ti-circle" style="color:#ce93d8;margin-right:4px"></i>Argón — CS: 528000</span>
       <input type="number" id="gas-argon" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
     </div>
+    <div>
+      <span class="section-label"><i class="ti ti-circle" style="color:#ffb74d;margin-right:4px"></i>Acetileno — CS: 528067</span>
+      <input type="number" id="gas-acetileno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
   </div>
+</div>
+
+<!-- IMPORTAR DESDE WHATSAPP -->
+<div class="card">
+  <div class="card-icon-header">
+    <div class="card-icon" style="background:rgba(37,211,102,0.12);color:#25d366"><i class="ti ti-brand-whatsapp"></i></div>
+    <div><div class="card-title">Importar desde WhatsApp</div><div class="card-sub">Pega el mensaje de WhatsApp y se autorellenarán las cantidades</div></div>
+  </div>
+  <textarea id="gas-wa-input" placeholder="Vacíos:
+- 6 oxígenos
+- 0 indurmig
+- 3 acetileno" style="width:100%;margin-top:12px;padding:10px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:13px;outline:none;resize:vertical;min-height:90px;font-family:inherit"></textarea>
+  <button onclick="gasImportarWhatsapp()" style="margin-top:10px;padding:9px 20px;background:#25d366;color:#000;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;gap:6px">
+    <i class="ti ti-brand-whatsapp"></i> Autorrellenar cantidades
+  </button>
+  <div id="gas-wa-result" style="margin-top:8px;font-size:12px;color:var(--text3)"></div>
 </div>
 
 <!-- PREVIEW CORREO -->
@@ -3008,6 +3024,53 @@ function gasEnviarCorreo(){
 
   const mailto = `mailto:${GAS_PARA}?cc=${cc}&subject=${asunto}&body=${cuerpo}`;
   window.location.href = mailto;
+}
+
+function gasImportarWhatsapp(){
+  const texto = document.getElementById('gas-wa-input').value.toLowerCase();
+  const resultado = document.getElementById('gas-wa-result');
+  if(!texto.trim()){ resultado.textContent = 'Pega un mensaje primero.'; return; }
+
+  // Extraer números asociados a cada gas
+  // Patrones: "6 oxigenos", "6 oxígenos", "oxigeno: 6", "- 6 oxígenos"
+  function extraerCantidad(texto, palabras){
+    for(const p of palabras){
+      // Patron: numero seguido de palabra
+      let m = texto.match(new RegExp('(\\d+)\\s+' + p));
+      if(m) return parseInt(m[1]);
+      // Patron: palabra seguida de numero o ":" numero
+      m = texto.match(new RegExp(p + '[^\\d]*(\\d+)'));
+      if(m) return parseInt(m[1]);
+    }
+    return null;
+  }
+
+  const oxigeno   = extraerCantidad(texto, ['ox[ií]genos?', 'oxigeno', 'ox[ií]geno']);
+  const argon     = extraerCantidad(texto, ['indurmig', 'arg[oó]n', 'argon', 'mezcla']);
+  const acetileno = extraerCantidad(texto, ['acetilenos?', 'acetileno']);
+
+  let encontrados = [];
+  if(oxigeno !== null){
+    document.getElementById('gas-oxigeno').value = oxigeno;
+    encontrados.push('Oxígeno: ' + oxigeno);
+  }
+  if(argon !== null){
+    document.getElementById('gas-argon').value = argon;
+    encontrados.push('Argón: ' + argon);
+  }
+  if(acetileno !== null){
+    document.getElementById('gas-acetileno').value = acetileno;
+    encontrados.push('Acetileno: ' + acetileno);
+  }
+
+  if(encontrados.length > 0){
+    resultado.style.color = 'var(--green)';
+    resultado.textContent = '✓ Autorellenado: ' + encontrados.join(' | ');
+  } else {
+    resultado.style.color = 'var(--red)';
+    resultado.textContent = 'No se encontraron cantidades. Verifica el formato del mensaje.';
+  }
+  gasActualizarPreview();
 }
 
 // Inicializar preview al cargar
