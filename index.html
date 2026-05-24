@@ -649,8 +649,17 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
   </div>
   <div id="gas-preview" style="margin-top:14px;padding:16px;background:var(--bg3);border-radius:10px;font-size:13px;line-height:1.9;color:var(--text2);white-space:pre-wrap;font-family:inherit"></div>
   <button onclick="gasEnviarCorreo()" style="margin-top:14px;padding:12px 28px;background:var(--yellow);color:#000;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;gap:8px">
-    <i class="ti ti-send"></i> Abrir en Outlook
+    <i class="ti ti-send"></i> Enviar
   </button>
+</div>
+
+<!-- HISTORIAL GASES -->
+<div class="card" id="gas-historial-card">
+  <div class="card-icon-header">
+    <div class="card-icon yellow"><i class="ti ti-history"></i></div>
+    <div><div class="card-title">Historial de solicitudes</div><div class="card-sub">Últimas 50 solicitudes generadas</div></div>
+  </div>
+  <div id="gas-historial-lista" style="margin-top:14px"></div>
 </div>
 
 </div><!-- fin mod-gases -->
@@ -3018,12 +3027,82 @@ function gasEnviarCorreo(){
   if(!ot){ alert('Por favor ingresa la OT antes de enviar.'); return; }
   if(oxigeno === 0 && acetileno === 0 && argon === 0){ alert('Por favor ingresa al menos una cantidad mayor a 0.'); return; }
 
-  const asunto = encodeURIComponent(`Solicitud de Gases Industriales - OT: ${ot}`);
+  const asunto = encodeURIComponent('Solicitud de Gases Industriales - OT: ' + ot);
   const cuerpo = encodeURIComponent(window._gasCuerpo || '');
   const cc     = encodeURIComponent(GAS_CC);
 
-  const mailto = `mailto:${GAS_PARA}?cc=${cc}&subject=${asunto}&body=${cuerpo}`;
+  const mailto = 'mailto:' + GAS_PARA + '?cc=' + cc + '&subject=' + asunto + '&body=' + cuerpo;
   window.location.href = mailto;
+
+  // Guardar en historial
+  gasGuardarHistorial({
+    fecha: document.getElementById('gas-fecha').value,
+    ot: ot,
+    oxigeno: oxigeno,
+    argon: argon,
+    acetileno: acetileno,
+    cuerpo: window._gasCuerpo || '',
+    timestamp: new Date().toLocaleString('es-CL')
+  });
+
+  // Limpiar todo para nueva solicitud
+  setTimeout(() => {
+    document.getElementById('gas-oxigeno').value = '0';
+    document.getElementById('gas-argon').value = '0';
+    document.getElementById('gas-acetileno').value = '0';
+    document.getElementById('gas-ot').value = '';
+    document.getElementById('gas-wa-input').value = '';
+    document.getElementById('gas-wa-result').textContent = '';
+    document.getElementById('gas-preview').textContent = '';
+    const hoy = new Date();
+    const fechaHoy = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
+    document.getElementById('gas-fecha').value = fechaHoy;
+    gasActualizarPreview();
+  }, 1000);
+}
+
+function gasGuardarHistorial(solicitud){
+  let historial = JSON.parse(localStorage.getItem('gas_historial') || '[]');
+  historial.unshift(solicitud); // agregar al inicio
+  if(historial.length > 50) historial = historial.slice(0, 50);
+  localStorage.setItem('gas_historial', JSON.stringify(historial));
+  gasRenderHistorial();
+}
+
+function gasBorrarHistorial(idx){
+  let historial = JSON.parse(localStorage.getItem('gas_historial') || '[]');
+  historial.splice(idx, 1);
+  localStorage.setItem('gas_historial', JSON.stringify(historial));
+  gasRenderHistorial();
+}
+
+function gasRenderHistorial(){
+  const lista = document.getElementById('gas-historial-lista');
+  if(!lista) return;
+  const historial = JSON.parse(localStorage.getItem('gas_historial') || '[]');
+  if(historial.length === 0){
+    lista.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:8px 0">No hay solicitudes registradas.</div>';
+    return;
+  }
+  lista.innerHTML = historial.map((s, i) => {
+    const lineas = [];
+    if(s.oxigeno > 0)   lineas.push('Oxígeno: ' + s.oxigeno);
+    if(s.argon > 0)     lineas.push('Argón: ' + s.argon);
+    if(s.acetileno > 0) lineas.push('Acetileno: ' + s.acetileno);
+    return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">' +
+      '<div style="flex:1">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">' +
+          '<span style="color:var(--yellow)">OT: ' + s.ot + '</span>' +
+          ' &nbsp;·&nbsp; Entrega: ' + (s.fecha || '—') +
+          ' &nbsp;·&nbsp; <span style="color:var(--text3);font-size:11px">' + s.timestamp + '</span>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--text2)">' + lineas.join(' &nbsp;|&nbsp; ') + '</div>' +
+      '</div>' +
+      '<button onclick="gasBorrarHistorial(' + i + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0">' +
+        '<i class="ti ti-trash"></i> Borrar' +
+      '</button>' +
+    '</div>';
+  }).join('');
 }
 
 function gasImportarWhatsapp(){
@@ -3066,6 +3145,7 @@ function gasImportarWhatsapp(){
   if(encontrados.length > 0){
     resultado.style.color = 'var(--green)';
     resultado.textContent = '✓ Autorellenado: ' + encontrados.join(' | ');
+    document.getElementById('gas-wa-input').value = '';
   } else {
     resultado.style.color = 'var(--red)';
     resultado.textContent = 'No se encontraron cantidades. Verifica el formato del mensaje.';
@@ -3080,6 +3160,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fechaHoy = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
   const inputFecha = document.getElementById('gas-fecha');
   if(inputFecha){ inputFecha.value = fechaHoy; gasActualizarPreview(); }
+  gasRenderHistorial();
 });
 
 
