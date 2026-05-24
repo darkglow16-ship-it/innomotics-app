@@ -2982,24 +2982,12 @@ function gasActualizarPreview(){
   const fechaEntrega = gasJueveSiguiente(fecha);
 
   let lineasInsumos = '';
-  if(oxigeno > 0)   lineasInsumos += `CS: 528034; OXIGENO; OXIGENO INDUSTRIAL CILINDRO 10 M3 x ${oxigeno} unidades.
-`;
-  if(acetileno > 0) lineasInsumos += `CS: 528067; ACETILENO; ACETILENO CORRIENTE CILINDRO 7 KG x ${acetileno} unidades.
-`;
-  if(argon > 0)     lineasInsumos += `CS: 528000; INDURMIG; MEZCLA ARGON/CO2 x ${argon} unidades.
-`;
+  if(oxigeno > 0)   lineasInsumos += 'CS: 528034; OXIGENO; OXIGENO INDUSTRIAL CILINDRO 10 M3 x ' + oxigeno + ' unidades.\n';
+  if(acetileno > 0) lineasInsumos += 'CS: 528067; ACETILENO; ACETILENO CORRIENTE CILINDRO 7 KG x ' + acetileno + ' unidades.\n';
+  if(argon > 0)     lineasInsumos += 'CS: 528000; INDURMIG; MEZCLA ARGON/CO2 x ' + argon + ' unidades.\n';
+  if(!lineasInsumos) lineasInsumos = '(Ingresa al menos una cantidad mayor a 0)\n';
 
-  if(!lineasInsumos) lineasInsumos = '(Ingresa al menos una cantidad mayor a 0)
-';
-
-  const cuerpo = `Estimados,
-
-Favor su apoyo con la gestión de compra de los siguientes insumos.
-
-Solicito su apoyo en gestionar la compra de insumo, se necesita en puerto el día ${fechaEntrega || '(selecciona una fecha)'}, la cantidad requerida es la siguiente;
-
-${lineasInsumos}
-OT: ${ot || '(ingresa la OT)'}`;
+  const cuerpo = 'Estimados,\n\nFavor su apoyo con la gestión de compra de los siguientes insumos.\n\nSolicito su apoyo en gestionar la compra de insumo, se necesita en puerto el día ' + (fechaEntrega || '(selecciona una fecha)') + ', la cantidad requerida es la siguiente;\n\n' + lineasInsumos + '\nOT: ' + (ot || '(ingresa la OT)');
 
   document.getElementById('gas-preview').textContent = cuerpo;
   window._gasCuerpo = cuerpo;
