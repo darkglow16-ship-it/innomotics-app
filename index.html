@@ -146,10 +146,11 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
 .hamburger{display:none;position:fixed;top:12px;left:12px;z-index:200;background:transparent;border:none;cursor:pointer;color:#fff;font-size:26px;padding:8px;line-height:1}
 .sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:99}
 @media(max-width:640px){
-  .sidebar{width:220px;transform:translateX(-220px);transition:transform 0.25s ease;position:fixed;z-index:100}
-  .sidebar.open{transform:translateX(0)}
-  .hamburger{display:block!important}
+  .sidebar{width:220px;transform:translateX(-220px);transition:transform 0.3s ease;position:fixed;top:0;left:0;height:100vh;z-index:150;overflow-y:auto}
+  .sidebar.open{transform:translateX(0)!important}
+  .hamburger{display:block!important;z-index:200}
   .main-content{margin-left:0!important;padding:1rem;width:100vw;padding-top:50px}
+  .sidebar-overlay{z-index:140}
 }
 .residuo-item{display:grid;grid-template-columns:2fr 180px 120px 36px;gap:8px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px}
 .residuo-item:last-child{border-bottom:none}
@@ -610,17 +611,19 @@ mark{background:rgba(225,240,0,0.25);color:var(--yellow);border-radius:2px;paddi
       <span class="section-label">OT (Orden de Trabajo)</span>
       <input type="text" id="gas-ot" placeholder="Ej: 12345678" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
     </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px">
     <div>
       <span class="section-label"><i class="ti ti-circle" style="color:#4fc3f7;margin-right:4px"></i>Oxígeno — CS: 528034</span>
       <input type="number" id="gas-oxigeno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
     </div>
     <div>
-      <span class="section-label"><i class="ti ti-circle" style="color:#ce93d8;margin-right:4px"></i>Argón — CS: 528000</span>
-      <input type="number" id="gas-argon" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
-    </div>
-    <div>
       <span class="section-label"><i class="ti ti-circle" style="color:#ffb74d;margin-right:4px"></i>Acetileno — CS: 528067</span>
       <input type="number" id="gas-acetileno" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
+    </div>
+    <div>
+      <span class="section-label"><i class="ti ti-circle" style="color:#ce93d8;margin-right:4px"></i>Argón — CS: 528000</span>
+      <input type="number" id="gas-argon" min="0" value="0" style="width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);font-size:14px;outline:none" oninput="gasActualizarPreview()">
     </div>
   </div>
 </div>
@@ -1844,6 +1847,10 @@ async function agregarTodosWA(){
   if(agregados>0){
     renderSelList();
     document.getElementById('selection-section').scrollIntoView({behavior:'smooth',block:'start'});
+    // Limpiar textarea y resultados WA
+    document.getElementById('wa-input').value = '';
+    document.getElementById('wa-results').style.display = 'none';
+    document.getElementById('wa-results-body').innerHTML = '';
   }
 }
 
@@ -1981,6 +1988,8 @@ const RESIDUOS_DEFAULT=[
   {desc:'RESIDUO INDUSTRIAL',codigo:'757034',kg:5000,peligroso:false,activo:true},
   {desc:'RESIDUO CHATARRA DE FIERRO',codigo:'757040',kg:4000,peligroso:false,activo:true},
   {desc:'RESIDUO PELIGROSO "TAMBORES VACIOS"',codigo:'757068',kg:4000,peligroso:true,activo:true},
+  {desc:'RESIDUO PELIGROSO INOXIDABLE',codigo:'757054',kg:2000,peligroso:true,activo:true},
+  {desc:'RESIDUOS MOTORES',codigo:'757054',kg:2000,peligroso:false,activo:true},
   {desc:'RESIDUO PELIGROSO, ACEITES USADOS C/S',codigo:'757072',kg:4000,peligroso:true,activo:true},
 ];
 let residuosLista=[...RESIDUOS_DEFAULT.map(r=>({...r}))];
@@ -3163,6 +3172,27 @@ document.addEventListener('DOMContentLoaded', () => {
   gasRenderHistorial();
 });
 
+
+function toggleSidebar(){
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  const isOpen = sb.classList.toggle('open');
+  ov.style.display = isOpen ? 'block' : 'none';
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+// Cerrar sidebar al cambiar modulo en movil
+const _origCambiarMob = cambiarModulo;
+cambiarModulo = function(modulo, navItem){
+  _origCambiarMob(modulo, navItem);
+  if(window.innerWidth <= 640){
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if(sb) sb.classList.remove('open');
+    if(ov) ov.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+};
 
 // Arrancar
 init();
