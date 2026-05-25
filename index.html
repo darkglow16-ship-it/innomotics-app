@@ -769,7 +769,7 @@ async function guardarAsociacion(textoOriginal,item){
   if(!db)return;
   try{
     const tx=db.transaction(STORE_ASOC,'readwrite');
-    tx.objectStore(STORE_ASOC).put({clave,itemId:item.id,codigo:item.codigo,desc:item.desc,fileName:item.fileName,sheet:item.sheet});
+    tx.objectStore(STORE_ASOC).put({clave,itemId:item.id,codigo:item.codigo,desc:item.desc,fileName:item.fileName,sheet:item.sheet,ts:Date.now()});
   }catch(e){}
 }
 
@@ -791,8 +791,13 @@ async function cargarAsociaciones(){
 function buscarAsociacion(texto){
   const clave=normalizarClave(texto);
   if(asociaciones[clave])return asociaciones[clave];
-  for(const [k,v] of Object.entries(asociaciones)){
-    if(clave.includes(k)||k.includes(clave))return v;
+  // Buscar coincidencia parcial solo si la clave es suficientemente especifica (>3 chars)
+  if(clave.length > 3){
+    for(const [k,v] of Object.entries(asociaciones)){
+      if(k===clave)return v;
+      // Solo match exacto de clave completa dentro del texto, no al revés
+      if(clave===k)return v;
+    }
   }
   return null;
 }
@@ -1657,13 +1662,14 @@ function importarWA(){
     if(it.esPerneroWA){
       const matches=buscarPernosPorMedida(it.medidaWA);
       const aprendido=buscarAsociacion('perno '+it.busqueda);
-      const itemAprendido=aprendido?allData.find(d=>d.codigo===aprendido.codigo):null;
-      return{...it, matches, seleccionado:itemAprendido?itemAprendido.id:null, aprendido:!!itemAprendido, buscandoManual:false, queryManual:''};
+      const itemAprendido=aprendido?(allData.find(d=>d.id===aprendido.itemId)||allData.find(d=>d.codigo===aprendido.codigo&&d.desc===aprendido.desc)||allData.find(d=>d.codigo===aprendido.codigo)):null;
+      const matchesOrdenadosPerno=itemAprendido?[itemAprendido,...matches.filter(m=>m.id!==itemAprendido.id)]:matches;
+      return{...it, matches:matchesOrdenadosPerno, seleccionado:itemAprendido?itemAprendido.id:null, aprendido:!!itemAprendido, buscandoManual:false, queryManual:''};
     } else if(it.esCorreaWA){
       // Buscar por medida exacta en campo medida
       const matches=buscarEnPlanillas(it.busqueda);
       const aprendido=buscarAsociacion('correa '+it.busqueda);
-      const itemAprendido=aprendido?allData.find(d=>d.codigo===aprendido.codigo):null;
+      const itemAprendido=aprendido?(allData.find(d=>d.id===aprendido.itemId)||allData.find(d=>d.codigo===aprendido.codigo&&d.desc===aprendido.desc)||allData.find(d=>d.codigo===aprendido.codigo)):null;
       // Deduplicar matches por medida+unidad para no mostrar duplicados
       const vistos=new Set();
       const matchesUnicos=matches.filter(m=>{
@@ -1678,9 +1684,11 @@ function importarWA(){
       return{...it, qty:qtyFinal, matches:matchesUnicos, seleccionado:sel, aprendido:!!itemAprendido, buscandoManual:false, queryManual:''};
     } else {
       const aprendido=buscarAsociacion(it.busqueda);
-      const itemAprendido=aprendido?allData.find(d=>d.codigo===aprendido.codigo):null;
+      const itemAprendido=aprendido?(allData.find(d=>d.id===aprendido.itemId)||allData.find(d=>d.codigo===aprendido.codigo&&d.desc===aprendido.desc)||allData.find(d=>d.codigo===aprendido.codigo)):null;
       const matches=buscarEnPlanillas(it.busqueda);
-      const sel=itemAprendido?itemAprendido.id:(matches.length>0?matches[0].id:null);
+      // Si hay aprendido, moverlo al inicio de matches para que aparezca primero
+      const matchesOrdenados=itemAprendido?[itemAprendido,...matches.filter(m=>m.id!==itemAprendido.id)]:matches;
+      const sel=itemAprendido?itemAprendido.id:(matchesOrdenados.length>0?matchesOrdenados[0].id:null);
       const selItem=sel!=null?allData.find(d=>d.id===sel):null;
       const qtyFinal=it.qty!==null?it.qty:(selItem?.qtdAuto||1);
       return{...it, qty:qtyFinal, matches, seleccionado:sel, aprendido:!!itemAprendido, buscandoManual:false, queryManual:''};
