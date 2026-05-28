@@ -989,165 +989,310 @@ function guardarYEnviar(){
   setTimeout(() => generarYEnviarPDF(), 300);
 }
 
+
 function generarYEnviarPDF(){
+
   if(!sdActual){ return; }
 
-  var hoy = new Date().toLocaleDateString('es-CL');
-  var hora = new Date().toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
-  var completadas = Object.values(checklistActual).filter(function(v){return v.estado!=='';}).length;
-  var pct = Math.round(completadas/ACTIVIDADES.length*100);
-  var siCount = Object.values(checklistActual).filter(function(v){return v.estado==='SI';}).length;
-  var noCount = Object.values(checklistActual).filter(function(v){return v.estado==='NO';}).length;
-  var naCount = Object.values(checklistActual).filter(function(v){return v.estado==='N/A';}).length;
+  const hoy = new Date().toLocaleDateString('es-CL');
+  const hora = new Date().toLocaleTimeString('es-CL', {
+    hour:'2-digit',
+    minute:'2-digit'
+  });
 
-  var doc = new jspdf.jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  var W = 210, margin = 14;
+  const completadas = Object.values(checklistActual)
+    .filter(v => v.estado !== '').length;
 
-  // Header negro
-  doc.setFillColor(26,26,26);
-  doc.rect(0, 0, W, 28, 'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(18);
+  const pct = Math.round(completadas / ACTIVIDADES.length * 100);
+
+  const siCount = Object.values(checklistActual)
+    .filter(v => v.estado === 'SI').length;
+
+  const noCount = Object.values(checklistActual)
+    .filter(v => v.estado === 'NO').length;
+
+  const naCount = Object.values(checklistActual)
+    .filter(v => v.estado === 'N/A').length;
+
+  const pendientes = ACTIVIDADES.length - completadas;
+
+  const doc = new jspdf.jsPDF({
+    orientation:'portrait',
+    unit:'mm',
+    format:'a4'
+  });
+
+  const W = 210;
+  const margin = 10;
+
+  doc.setFillColor(0,0,0);
+  doc.rect(0,0,W,28,'F');
+
+  doc.setTextColor(241,240,0);
   doc.setFont('helvetica','bold');
-  doc.text('INNOMOTICS', margin, 18);
+  doc.setFontSize(28);
+  doc.text('INNOMOTICS', 10, 18);
+
+  doc.setTextColor(255,255,255);
   doc.setFontSize(10);
-  doc.setFont('helvetica','normal');
-  doc.setTextColor(180,180,180);
-  doc.text('CHECKLIST SHUTDOWN', W-margin, 14, {align:'right'});
-  doc.text('Puerto Patache  \u2022  '+hoy+'  '+hora, W-margin, 20, {align:'right'});
+  doc.text('CHECKLIST SHUTDOWN', 10, 25);
 
-  // Banner verde
-  doc.setFillColor(0,166,81);
-  doc.rect(0, 28, W, 10, 'F');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(8);
-  doc.setFont('helvetica','bold');
-  doc.text('REPORTE DE ACTIVIDADES DE PREPARACION - SHUTDOWN', W/2, 34.5, {align:'center'});
+  doc.setFontSize(9);
+  doc.text('Puerto Patache', 145, 12);
+  doc.text(hoy + '  ' + hora, 145, 18);
+  doc.text('Serv. Mantención General Planta', 145, 24);
 
-  // Info boxes
-  var y = 48;
-  doc.setDrawColor(220,220,220);
-  doc.setFillColor(245,245,245);
-  // Box SD
-  doc.roundedRect(margin, y, 55, 18, 2, 2, 'FD');
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(7);
-  doc.setFont('helvetica','normal');
-  doc.text('NUMERO SD', margin+4, y+6);
-  doc.setTextColor(26,26,26);
-  doc.setFontSize(13);
-  doc.setFont('helvetica','bold');
-  doc.text(sdActual, margin+4, y+14);
-  // Box TAG
-  doc.setFillColor(245,245,245);
-  doc.roundedRect(margin+60, y, 55, 18, 2, 2, 'FD');
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(7);
-  doc.setFont('helvetica','normal');
-  doc.text('TAG EQUIPO', margin+64, y+6);
-  doc.setTextColor(26,26,26);
-  doc.setFontSize(13);
-  doc.setFont('helvetica','bold');
-  doc.text(tagActual||'N/A', margin+64, y+14);
-  // Box Fecha
-  doc.setFillColor(245,245,245);
-  doc.roundedRect(margin+120, y, 55, 18, 2, 2, 'FD');
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(7);
-  doc.setFont('helvetica','normal');
-  doc.text('FECHA REPORTE', margin+124, y+6);
-  doc.setTextColor(26,26,26);
-  doc.setFontSize(11);
-  doc.setFont('helvetica','bold');
-  doc.text(hoy, margin+124, y+14);
+  doc.setFillColor(241,240,0);
+  doc.rect(0,28,W,12,'F');
 
-  // Progreso
-  y = 74;
-  doc.setFillColor(245,245,245);
-  doc.roundedRect(margin, y, W-margin*2, 20, 2, 2, 'FD');
-  doc.setTextColor(150,150,150);
-  doc.setFontSize(7);
-  doc.setFont('helvetica','normal');
-  doc.text('AVANCE DEL CHECKLIST - '+pct+'% COMPLETADO ('+completadas+'/'+ACTIVIDADES.length+' ACTIVIDADES)', margin+4, y+6);
-  // Barra progreso
-  doc.setFillColor(220,220,220);
-  doc.roundedRect(margin+4, y+9, W-margin*2-8, 4, 2, 2, 'F');
-  if(pct>0){
-    doc.setFillColor(0,166,81);
-    doc.roundedRect(margin+4, y+9, (W-margin*2-8)*pct/100, 4, 2, 2, 'F');
+  doc.setTextColor(0,0,0);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(14);
+
+  doc.text(
+    'REPORTE DE ACTIVIDADES DE PREPARACION - SHUTDOWN',
+    W/2,
+    36,
+    {align:'center'}
+  );
+
+  const yCards = 46;
+
+  function card(x, titulo, valor){
+    doc.setDrawColor(220,220,220);
+    doc.setFillColor(250,250,250);
+
+    doc.roundedRect(x, yCards, 52, 24, 3, 3, 'FD');
+
+    doc.setTextColor(120,120,120);
+    doc.setFontSize(7);
+    doc.setFont('helvetica','bold');
+    doc.text(titulo, x+5, yCards+7);
+
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(18);
+    doc.setFont('helvetica','bold');
+    doc.text(valor, x+5, yCards+17);
   }
-  // Stats
-  doc.setFontSize(8);
-  doc.setTextColor(46,125,50); doc.text('\u25CF SI: '+siCount, margin+4, y+18);
-  doc.setTextColor(198,40,40); doc.text('\u25CF NO: '+noCount, margin+30, y+18);
-  doc.setTextColor(57,73,171); doc.text('\u25CF N/A: '+naCount, margin+56, y+18);
-  doc.setTextColor(120,120,120); doc.text('\u25CF Pendiente: '+(ACTIVIDADES.length-completadas), margin+82, y+18);
 
-  // Tabla de actividades
-  y = 100;
-  var rows = [];
-  for(var i=0; i<ACTIVIDADES.length; i++){
-    var item = checklistActual[i]||{estado:'',obs:'',fecha:''};
-    var est = item.estado||'Pendiente';
-    var fechaFmt = item.fecha ? item.fecha.split('-').reverse().join('-') : '-';
-    rows.push([(i+1)+'. '+ACTIVIDADES[i], est, item.obs||'-', fechaFmt]);
+  card(10, 'NUMERO SD', sdActual);
+  card(79, 'TAG EQUIPO', tagActual || 'N/A');
+  card(148, 'FECHA REPORTE', hoy);
+
+  const yProg = 78;
+
+  doc.setDrawColor(220,220,220);
+  doc.setFillColor(252,252,252);
+
+  doc.roundedRect(10, yProg, 190, 30, 3, 3, 'FD');
+
+  doc.setTextColor(0,0,0);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(12);
+
+  doc.text('AVANCE DEL CHECKLIST', 15, yProg+8);
+
+  doc.setFontSize(24);
+  doc.setTextColor(0,140,40);
+  doc.text(pct + '%', 15, yProg+20);
+
+  doc.setFontSize(10);
+  doc.setTextColor(0,0,0);
+  doc.text('completado ('+completadas+'/'+ACTIVIDADES.length+' actividades)', 40, yProg+20);
+
+  doc.setFillColor(230,230,230);
+  doc.roundedRect(60, yProg+10, 120, 5, 3, 3, 'F');
+
+  doc.setFillColor(241,240,0);
+  doc.roundedRect(60, yProg+10, 120*pct/100, 5, 3, 3, 'F');
+
+  doc.setFontSize(10);
+
+  doc.setTextColor(0,140,40);
+  doc.text('SI: ' + siCount, 70, yProg+26);
+
+  doc.setTextColor(200,0,0);
+  doc.text('NO: ' + noCount, 105, yProg+26);
+
+  doc.setTextColor(100,100,100);
+  doc.text('N/A: ' + naCount, 140, yProg+26);
+
+  doc.setTextColor(120,120,120);
+  doc.text('Pendientes: ' + pendientes, 168, yProg+26);
+
+  const rows = [];
+
+  for(let i=0;i<ACTIVIDADES.length;i++){
+
+    const item = checklistActual[i] || {
+      estado:'',
+      obs:'',
+      fecha:''
+    };
+
+    rows.push([
+      i+1,
+      ACTIVIDADES[i],
+      item.estado || 'PENDIENTE',
+      item.fecha || '-',
+      item.obs || '-'
+    ]);
   }
 
   doc.autoTable({
-    startY: y,
-    head: [['Actividad','Estado','Observacion','Fecha']],
+
+    startY: 118,
+
+    head:[[
+      '#',
+      'ACTIVIDAD',
+      'ESTADO',
+      'FECHA',
+      'OBSERVACIONES'
+    ]],
+
     body: rows,
-    margin: {left:margin, right:margin},
-    headStyles: {fillColor:[26,26,26], textColor:[255,255,255], fontSize:9, fontStyle:'bold'},
-    columnStyles: {
-      0:{cellWidth:80, fontSize:9, fontStyle:'bold'},
-      1:{cellWidth:22, halign:'center', fontSize:9},
-      2:{cellWidth:60, fontSize:8},
-      3:{cellWidth:24, halign:'center', fontSize:8}
+
+    margin:{
+      left:10,
+      right:10
     },
-    bodyStyles: {textColor:[30,30,30]},
-    alternateRowStyles: {fillColor:[250,250,250]},
-    didParseCell: function(data){
-      if(data.section==='body' && data.column.index===1){
-        var v = data.cell.raw;
-        if(v==='SI'){data.cell.styles.textColor=[46,125,50];data.cell.styles.fontStyle='bold';}
-        else if(v==='NO'){data.cell.styles.textColor=[198,40,40];data.cell.styles.fontStyle='bold';}
-        else if(v==='N/A'){data.cell.styles.textColor=[57,73,171];data.cell.styles.fontStyle='bold';}
-        else {data.cell.styles.textColor=[150,150,150];}
+
+    styles:{
+      font:'helvetica',
+      fontSize:8,
+      cellPadding:3,
+      valign:'middle'
+    },
+
+    headStyles:{
+      fillColor:[0,0,0],
+      textColor:[255,255,255],
+      fontStyle:'bold',
+      halign:'center'
+    },
+
+    alternateRowStyles:{
+      fillColor:[248,248,248]
+    },
+
+    columnStyles:{
+      0:{cellWidth:10, halign:'center'},
+      1:{cellWidth:65},
+      2:{cellWidth:25, halign:'center'},
+      3:{cellWidth:28, halign:'center'},
+      4:{cellWidth:52}
+    },
+
+    didParseCell:function(data){
+
+      if(data.section === 'body' && data.column.index === 2){
+
+        const v = data.cell.raw;
+
+        if(v === 'SI'){
+          data.cell.styles.fillColor = [20,160,60];
+          data.cell.styles.textColor = [255,255,255];
+          data.cell.styles.fontStyle = 'bold';
+        }
+
+        if(v === 'NO'){
+          data.cell.styles.fillColor = [220,40,40];
+          data.cell.styles.textColor = [255,255,255];
+          data.cell.styles.fontStyle = 'bold';
+        }
+
+        if(v === 'N/A'){
+          data.cell.styles.fillColor = [140,140,140];
+          data.cell.styles.textColor = [255,255,255];
+          data.cell.styles.fontStyle = 'bold';
+        }
+
+        if(v === 'PENDIENTE'){
+          data.cell.styles.fillColor = [230,230,230];
+          data.cell.styles.textColor = [80,80,80];
+        }
       }
     }
   });
 
-  // Footer
-  var pageH = doc.internal.pageSize.height;
-  doc.setDrawColor(200,200,200);
-  doc.line(margin, pageH-14, W-margin, pageH-14);
-  doc.setFontSize(8);
-  doc.setTextColor(150,150,150);
-  doc.setFont('helvetica','normal');
-  doc.text('Innomotics Puerto Patache', margin, pageH-8);
-  doc.text('SD: '+sdActual+'  \u2022  '+hoy, W-margin, pageH-8, {align:'right'});
+  const pageH = doc.internal.pageSize.height;
 
-  // Descargar PDF
-  var nombreArchivo = 'Checklist_'+sdActual+(tagActual?'_'+tagActual:'')+'.pdf';
+  doc.setDrawColor(241,240,0);
+  doc.line(10, pageH-24, 200, pageH-24);
+
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(9);
+  doc.setFont('helvetica','bold');
+
+  doc.text('Generado por:', 12, pageH-16);
+
+  doc.setFont('helvetica','normal');
+
+  doc.text('Roberto Armando Gallardo', 12, pageH-10);
+  doc.text('Innomotics - Chile', 12, pageH-5);
+
+  doc.setFont('helvetica','bold');
+  doc.setTextColor(241,240,0);
+  doc.setFontSize(18);
+
+  doc.text('INNOMOTICS', 150, pageH-10);
+
+  const nombreArchivo =
+    'Checklist_' +
+    sdActual +
+    (tagActual ? '_' + tagActual : '') +
+    '.pdf';
+
   doc.save(nombreArchivo);
 
-  // Abrir Outlook después de 1 segundo
   setTimeout(function(){
-    var para   = 'pedro.elisondo-gonzalez@innomotics.com';
-    var cc     = 'giovanni.munoz-cea@innomotics.com;roberto.armando-gallardo@innomotics.com;manuel.espejo_barnett@innomotics.com;sebastian.rodriguez.olivares@gmail.com;navergara@collahuasi.cl';
-    var asunto = encodeURIComponent('Checklist Shutdown '+sdActual+(tagActual?' - '+tagActual:'')+' - '+hoy);
-    var cuerpo = encodeURIComponent(
-      'Estimados,\n\nAdjunto informe del Checklist Shutdown:\n\n'
-      +'- Numero SD: '+sdActual+'\n'
-      +'- TAG: '+(tagActual||'N/A')+'\n'
-      +'- Fecha: '+hoy+'\n'
-      +'- Avance: '+pct+'% completado ('+completadas+'/'+ACTIVIDADES.length+' actividades)\n\n'
-      +'Por favor adjuntar el PDF descargado.\n\nSaludos,\nInnomotics Puerto Patache'
+
+    const para =
+      'pedro.elisondo-gonzalez@innomotics.com';
+
+    const cc =
+      'giovanni.munoz-cea@innomotics.com;' +
+      'roberto.armando-gallardo@innomotics.com;' +
+      'manuel.espejo_barnett@innomotics.com';
+
+    const asunto = encodeURIComponent(
+      'Checklist Shutdown ' +
+      sdActual +
+      (tagActual ? ' - ' + tagActual : '') +
+      ' - ' + hoy
     );
-    window.location.href = 'mailto:'+para+'?cc='+encodeURIComponent(cc)+'&subject='+asunto+'&body='+cuerpo;
-  }, 1500);
+
+    const cuerpo = encodeURIComponent(
+      'Estimados,
+
+' +
+      'Adjunto informe del Checklist Shutdown:
+
+' +
+      '- Numero SD: ' + sdActual + '
+' +
+      '- TAG: ' + (tagActual || 'N/A') + '
+' +
+      '- Fecha: ' + hoy + '
+' +
+      '- Avance: ' + pct + '% completado
+
+' +
+      'Saludos,
+' +
+      'Innomotics Puerto Patache'
+    );
+
+    window.location.href =
+      'mailto:' + para +
+      '?cc=' + cc +
+      '&subject=' + asunto +
+      '&body=' + cuerpo;
+
+  }, 1200);
 }
+
 
 </script>
 
