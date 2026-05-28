@@ -1253,27 +1253,16 @@ function generarYEnviarPDF(){
       'giovanni.munoz-cea@innomotics.com;      'roberto.armando-gallardo@innomotics.com;      'manuel.espejo_barnett@innomotics.com';
 
     const asunto = encodeURIComponent(
-      'Checklist Shutdown       sdActual +
-      (tagActual ? ' - ' + tagActual : '') +
-      ' - ' + hoy
+      'Solicitud Gases Industriales OT ' + ot + ' - ' + hoy
     );
 
     const cuerpo = encodeURIComponent(
-      'Estimados,
-
-' +
-      'Solicitud de gases industriales para OT: ' + ot + '
-
-' +
-      '- Oxigeno: ' + oxigeno + '
-' +
-      '- Acetileno: ' + acetileno + '
-' +
-      '- Argon: ' + argon + '
-
-' +
-      'Saludos,
-' +
+      'Estimados,\n\n' +
+      'Solicitud de gases industriales para OT: ' + ot + '\n\n' +
+      '- Oxigeno: ' + oxigeno + '\n' +
+      '- Acetileno: ' + acetileno + '\n' +
+      '- Argon: ' + argon + '\n\n' +
+      'Saludos,\n' +
       'Innomotics Puerto Patache'
     );
 
