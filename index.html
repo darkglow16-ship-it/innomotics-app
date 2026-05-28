@@ -1484,7 +1484,11 @@ function renderAsocPanel(){
   }
 
   lista.innerHTML = entries.map(([clave, val]) => {
-    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)">      '<div style="flex:1;min-width:0">        '<div style="font-size:12px;color:var(--text3);margin-bottom:2px">Búsqueda: <b style="color:var(--text2)">' + clave + '</b></div>        '<div style="font-size:13px;color:var(--text);font-weight:600">' + (val.codigo||'') + ' — ' + (val.desc||'') + '</div>      '</div>      '<button onclick="borrarAsociacion(' + JSON.stringify(clave) + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;flex-shrink:0">        '<i class="ti ti-trash"></i> Borrar      '</button>    '</div>';
+    return `
+<div style="display:flex;gap:8px">
+  ${typeof contenido !== 'undefined' ? contenido : ''}
+</div>
+`;
   }).join('');
 }
 
