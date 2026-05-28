@@ -824,23 +824,7 @@ function renderChecklist(){
   const body = document.getElementById('checklist-body');
   body.innerHTML = ACTIVIDADES.map((act, i) => {
     const item = checklistActual[i] || {estado:'', obs:'', fecha:''};
-    return '<div class="chk-item" id="chk-'+i+'">' +
-      '<div>' +
-        '<div class="chk-num">Actividad ' + (i+1) + ' de ' + ACTIVIDADES.length + '</div>' +
-        '<div class="chk-name">' + act + '</div>' +
-        '<div class="chk-estado">' +
-          '<button class="estado-btn ' + (item.estado==='SI'?'si':'') + '" onclick="setEstado('+i+',\'SI\')">✓ SI</button>' +
-          '<button class="estado-btn ' + (item.estado==='NO'?'no':'') + '" onclick="setEstado('+i+',\'NO\')">✗ NO</button>' +
-          '<button class="estado-btn ' + (item.estado==='N/A'?'na':'') + '" onclick="setEstado('+i+',\'N/A\')">— N/A</button>' +
-        '</div>' +
-        '<div class="chk-obs">' +
-          '<input type="text" placeholder="Observación (opcional)..." value="' + (item.obs||'').replace(/"/g,'&quot;') + '" oninput="setObs('+i+',this.value)">' +
-        '</div>' +
-        '<div class="chk-fecha">' +
-          '<input type="date" value="' + (item.fecha||'') + '" onchange="setFecha('+i+',this.value)">' +
-        '</div>' +
-      '</div>' +
-    '</div>';
+    return '<div class="chk-item" id="chk-'+i+'">      '<div>        '<div class="chk-num">Actividad ' + (i+1) + ' de ' + ACTIVIDADES.length + '</div>        '<div class="chk-name">' + act + '</div>        '<div class="chk-estado">          '<button class="estado-btn ' + (item.estado==='SI'?'si':'') + '" onclick="setEstado('+i+',\'SI\')">✓ SI</button>          '<button class="estado-btn ' + (item.estado==='NO'?'no':'') + '" onclick="setEstado('+i+',\'NO\')">✗ NO</button>          '<button class="estado-btn ' + (item.estado==='N/A'?'na':'') + '" onclick="setEstado('+i+',\'N/A\')">— N/A</button>        '</div>        '<div class="chk-obs">          '<input type="text" placeholder="Observación (opcional)..." value="' + (item.obs||'').replace(/"/g,'&quot;') + '" oninput="setObs('+i+',this.value)">        '</div>        '<div class="chk-fecha">          '<input type="date" value="' + (item.fecha||'') + '" onchange="setFecha('+i+',this.value)">        '</div>      '</div>    '</div>';
   }).join('');
 }
 
@@ -933,20 +917,7 @@ function renderHistorial(){
     const total = ACTIVIDADES.length;
     const completadas = Object.values(s.checklist).filter(v => v.estado !== '').length;
     const pct = Math.round(completadas/total*100);
-    return '<div class="sd-card" onclick="abrirSD(\'' + s.numero + '\')">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<div>' +
-          '<div class="sd-card-title">' + s.numero + (s.tag ? ' — ' + s.tag : '') + '</div>' +
-          '<div class="sd-card-sub">Última modificación: ' + s.ultimaModificacion + '</div>' +
-        '</div>' +
-        '<div style="display:flex;gap:8px;align-items:center">' +
-          '<span class="badge ' + (pct===100?'badge-green':'badge-yellow') + '">' + pct + '% completado</span>' +
-          '<button onclick="event.stopPropagation();borrarSD(\'' + s.numero + '\')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px">' +
-            '<i class="ti ti-trash"></i>' +
-          '</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
+    return '<div class="sd-card" onclick="abrirSD(\'' + s.numero + '\')">      '<div style="display:flex;justify-content:space-between;align-items:center">        '<div>          '<div class="sd-card-title">' + s.numero + (s.tag ? ' — ' + s.tag : '') + '</div>          '<div class="sd-card-sub">Última modificación: ' + s.ultimaModificacion + '</div>        '</div>        '<div style="display:flex;gap:8px;align-items:center">          '<span class="badge ' + (pct===100?'badge-green':'badge-yellow') + '">' + pct + '% completado</span>          '<button onclick="event.stopPropagation();borrarSD(\'' + s.numero + '\')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px">            '<i class="ti ti-trash"></i>          '</button>        '</div>      '</div>    '</div>';
   }).join('');
 }
 
@@ -1239,8 +1210,7 @@ function generarYEnviarPDF(){
   doc.text('INNOMOTICS', 150, pageH-10);
 
   const nombreArchivo =
-    'Checklist_' +
-    sdActual +
+    'Checklist_    sdActual +
     (tagActual ? '_' + tagActual : '') +
     '.pdf';
 
@@ -1252,32 +1222,21 @@ function generarYEnviarPDF(){
       'pedro.elisondo-gonzalez@innomotics.com';
 
     const cc =
-      'giovanni.munoz-cea@innomotics.com;' +
-      'roberto.armando-gallardo@innomotics.com;' +
-      'manuel.espejo_barnett@innomotics.com';
+      'giovanni.munoz-cea@innomotics.com;      'roberto.armando-gallardo@innomotics.com;      'manuel.espejo_barnett@innomotics.com';
 
     const asunto = encodeURIComponent(
-      'Checklist Shutdown ' +
-      sdActual +
+      'Checklist Shutdown       sdActual +
       (tagActual ? ' - ' + tagActual : '') +
       ' - ' + hoy
     );
 
     const cuerpo = encodeURIComponent(
-      'Estimados,\n\n' +
-      'Adjunto informe del Checklist Shutdown:\n\n' +
-' +
-      '- Numero SD: ' + sdActual + '
-' +
+      'Estimados,\n\n      'Adjunto informe del Checklist Shutdown:\n\n      '- Numero SD: ' + sdActual + '
       '- TAG: ' + (tagActual || 'N/A') + '
-' +
       '- Fecha: ' + hoy + '
-' +
       '- Avance: ' + pct + '% completado
 
-' +
       'Saludos,
-' +
       'Innomotics Puerto Patache'
     );
 
@@ -3675,20 +3634,12 @@ function gasEnviarCorreo(){
 
   const asunto = encodeURIComponent('Solicitud de Gases Industriales - OT: ' + ot);
   const cuerpo = encodeURIComponent(
-      'Estimados,\n\n' +
-      'Adjunto informe del Checklist Shutdown:\n\n' +
-' +
-      '- Numero SD: ' + sdActual + '
-' +
+      'Estimados,\n\n      'Adjunto informe del Checklist Shutdown:\n\n      '- Numero SD: ' + sdActual + '
       '- TAG: ' + (tagActual || 'N/A') + '
-' +
       '- Fecha: ' + hoy + '
-' +
       '- Avance: ' + pct + '% completado
 
-' +
       'Saludos,
-' +
       'Innomotics Puerto Patache'
     );
   const cc     = encodeURIComponent(GAS_CC);
@@ -3751,19 +3702,8 @@ function gasRenderHistorial(){
     if(s.oxigeno > 0)   lineas.push('Oxígeno: ' + s.oxigeno);
     if(s.argon > 0)     lineas.push('Argón: ' + s.argon);
     if(s.acetileno > 0) lineas.push('Acetileno: ' + s.acetileno);
-    return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">' +
-      '<div style="flex:1">' +
-        '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">' +
-          '<span style="color:var(--yellow)">OT: ' + s.ot + '</span>' +
-          ' &nbsp;·&nbsp; Entrega: ' + (s.fecha || '—') +
-          ' &nbsp;·&nbsp; <span style="color:var(--text3);font-size:11px">' + s.timestamp + '</span>' +
-        '</div>' +
-        '<div style="font-size:12px;color:var(--text2)">' + lineas.join(' &nbsp;|&nbsp; ') + '</div>' +
-      '</div>' +
-      '<button onclick="gasBorrarHistorial(' + i + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0">' +
-        '<i class="ti ti-trash"></i> Borrar' +
-      '</button>' +
-    '</div>';
+    return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">      '<div style="flex:1">        '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">          '<span style="color:var(--yellow)">OT: ' + s.ot + '</span>          ' &nbsp;·&nbsp; Entrega: ' + (s.fecha || '—') +
+          ' &nbsp;·&nbsp; <span style="color:var(--text3);font-size:11px">' + s.timestamp + '</span>        '</div>        '<div style="font-size:12px;color:var(--text2)">' + lineas.join(' &nbsp;|&nbsp; ') + '</div>      '</div>      '<button onclick="gasBorrarHistorial(' + i + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0">        '<i class="ti ti-trash"></i> Borrar      '</button>    '</div>';
   }).join('');
 }
 
@@ -3870,15 +3810,7 @@ function renderAsocPanel(){
   }
 
   lista.innerHTML = entries.map(([clave, val]) => {
-    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)">' +
-      '<div style="flex:1;min-width:0">' +
-        '<div style="font-size:12px;color:var(--text3);margin-bottom:2px">Búsqueda: <b style="color:var(--text2)">' + clave + '</b></div>' +
-        '<div style="font-size:13px;color:var(--text);font-weight:600">' + (val.codigo||'') + ' — ' + (val.desc||'') + '</div>' +
-      '</div>' +
-      '<button onclick="borrarAsociacion(' + JSON.stringify(clave) + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;flex-shrink:0">' +
-        '<i class="ti ti-trash"></i> Borrar' +
-      '</button>' +
-    '</div>';
+    return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)">      '<div style="flex:1;min-width:0">        '<div style="font-size:12px;color:var(--text3);margin-bottom:2px">Búsqueda: <b style="color:var(--text2)">' + clave + '</b></div>        '<div style="font-size:13px;color:var(--text);font-weight:600">' + (val.codigo||'') + ' — ' + (val.desc||'') + '</div>      '</div>      '<button onclick="borrarAsociacion(' + JSON.stringify(clave) + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;flex-shrink:0">        '<i class="ti ti-trash"></i> Borrar      '</button>    '</div>';
   }).join('');
 }
 
