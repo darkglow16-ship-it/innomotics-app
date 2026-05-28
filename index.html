@@ -973,7 +973,19 @@ function borrarSD(numero){
    ========================================================= */
 function guardarYEnviar(){
   if(!sdActual){ alert('Carga un SD primero'); return; }
+
+  // Respaldar datos antes de guardar
+  const sdBackup = sdActual;
+  const tagBackup = tagActual;
+  const checklistBackup = JSON.parse(JSON.stringify(checklistActual));
+
   guardarSD();
+
+  // Restaurar datos para generar PDF y correo
+  sdActual = sdBackup;
+  tagActual = tagBackup;
+  checklistActual = checklistBackup;
+
   setTimeout(() => generarYEnviarPDF(), 300);
 }
 
