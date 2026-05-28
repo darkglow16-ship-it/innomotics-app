@@ -66,6 +66,24 @@ function gasActualizarPreview(){
 // ===== FIN FUNCIONES RESTAURADAS =====
 
 
+
+
+// ===== INIT RESTAURADO =====
+function init(){
+    try{
+        console.log('Aplicación inicializada');
+
+        if(typeof gasActualizarPreview === 'function'){
+            gasActualizarPreview();
+        }
+
+    }catch(err){
+        console.error('Error en init:', err);
+    }
+}
+// ===== FIN INIT =====
+
+
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
