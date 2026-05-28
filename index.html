@@ -945,33 +945,7 @@ function renderHistorial(){
     const total = ACTIVIDADES.length;
     const completadas = Object.values(s.checklist).filter(v => v.estado !== '').length;
     const pct = Math.round(completadas/total*100);
-    return `
-      <div class="sd-card" onclick="abrirSD('${s.numero}')">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div class="sd-card-title">
-              ${s.numero}${s.tag ? ' — ' + s.tag : ''}
-            </div>
-            <div class="sd-card-sub">
-              Última modificación: ${s.ultimaModificacion}
-            </div>
-          </div>
-
-          <div style="display:flex;gap:8px;align-items:center">
-            <span class="badge ${pct===100 ? 'badge-green' : 'badge-yellow'}">
-              ${pct}% completado
-            </span>
-
-            <button
-              onclick="event.stopPropagation();borrarSD('${s.numero}')"
-              style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px"
-            >
-              <i class="ti ti-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
+    return '<div class="sd-card" onclick="abrirSD(\'' + s.numero + '\')">      '<div style="display:flex;justify-content:space-between;align-items:center">        '<div>          '<div class="sd-card-title">' + s.numero + (s.tag ? ' — ' + s.tag : '') + '</div>          '<div class="sd-card-sub">Última modificación: ' + s.ultimaModificacion + '</div>        '</div>        '<div style="display:flex;gap:8px;align-items:center">          '<span class="badge ' + (pct===100?'badge-green':'badge-yellow') + '">' + pct + '% completado</span>          '<button onclick="event.stopPropagation();borrarSD(\'' + s.numero + '\')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px">            '<i class="ti ti-trash"></i>          '</button>        '</div>      '</div>    '</div>';
   }).join('');
 }
 
@@ -1275,8 +1249,10 @@ function generarYEnviarPDF(){
     const para =
       'pedro.elisondo-gonzalez@innomotics.com';
 
-    const cc =
-      'giovanni.munoz-cea@innomotics.com;      'roberto.armando-gallardo@innomotics.com;      'manuel.espejo_barnett@innomotics.com';
+    const ccLista =
+      'giovanni.munoz-cea@innomotics.com;' +
+      'roberto.armando-gallardo@innomotics.com;' +
+      'manuel.espejo_barnett@innomotics.com';
 
     const asunto = encodeURIComponent(
       'Solicitud Gases Industriales OT ' + ot + ' - ' + hoy
@@ -1292,7 +1268,7 @@ function generarYEnviarPDF(){
       'Innomotics Puerto Patache'
     );
 
-  const cc     = encodeURIComponent(GAS_CC);
+  const cc = encodeURIComponent(ccLista);
 
   const mailto = 'mailto:' + GAS_PARA + '?cc=' + cc + '&subject=' + asunto + '&body=' + cuerpo;
   window.location.href = mailto;
