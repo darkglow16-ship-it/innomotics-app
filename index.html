@@ -1356,8 +1356,28 @@ function gasRenderHistorial(){
     if(s.oxigeno > 0)   lineas.push('Oxígeno: ' + s.oxigeno);
     if(s.argon > 0)     lineas.push('Argón: ' + s.argon);
     if(s.acetileno > 0) lineas.push('Acetileno: ' + s.acetileno);
-    return '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">      '<div style="flex:1">        '<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">          '<span style="color:var(--yellow)">OT: ' + s.ot + '</span>          ' &nbsp;·&nbsp; Entrega: ' + (s.fecha || '—') +
-          ' &nbsp;·&nbsp; <span style="color:var(--text3);font-size:11px">' + s.timestamp + '</span>        '</div>        '<div style="font-size:12px;color:var(--text2)">' + lineas.join(' &nbsp;|&nbsp; ') + '</div>      '</div>      '<button onclick="gasBorrarHistorial(' + i + ')" style="padding:4px 10px;background:rgba(255,71,87,0.1);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);border-radius:6px;cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0">        '<i class="ti ti-trash"></i> Borrar      '</button>    '</div>';
+    return `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px">
+            <span style="color:var(--accent);font-weight:700">${s.ot}</span>
+            &nbsp;·&nbsp;
+            <span style="color:var(--text3);font-size:11px">${s.timestamp}</span>
+          </div>
+
+          <div style="font-size:12px;color:var(--text2)">
+            ${lineas.join(' &nbsp;|&nbsp; ')}
+          </div>
+        </div>
+
+        <button
+          onclick="gasBorrarHistorial(${i})"
+          style="padding:4px 8px;border:none;background:#2a2f3f;color:#fff;border-radius:6px;cursor:pointer"
+        >
+          🗑
+        </button>
+      </div>
+    `;
   }).join('');
 }
 
